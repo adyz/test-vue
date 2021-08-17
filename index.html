@@ -19,8 +19,8 @@
           :id="id" 
           type="checkbox" 
           class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-          :checked="inputValue"
-          :value="inputValue"
+          :checked="value"
+          :value="value"
           @input="updateInputValue($event.target.checked)"
         >
       </div>
@@ -44,6 +44,8 @@
           :type="type"
           :name="name"
           :id="id"
+          :value="value"
+          @input="$emit('input', $event.target.value)"
           class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" 
         >
       </div>
@@ -52,24 +54,29 @@
   </script>
 
   <script type="text/html" id="FormSection">
-  <div>
-        <h2>{{title}}</h2>
-        <form-checkbox-input 
-          :label="'Nu sunt probleme ' + title" 
-          :id="'probleme_'+ id" 
-          :name="'probleme_'+ id"
-          :inputValue="problems"
-          v-model="problems"
-        >
-        </form-checkbox-input>
-        <input class="filter__input" type="checkbox" v-model="problems"></input>
-        <p>bbb: {{problems ? 'da': 'ba'}}</p>
-        <p>aaa: {{problems ? 'da': 'ba'}}</p>
+  <div class="border border-gray-100 p-4 rounded-md">
+        <h2 class="text-lg">{{title}}</h2>
 
-        <!-- <div class="border border-gray-200 p-4">
-          <form-checkbox-input label="Gropi" id="GROPI" name="GROPI"></form-checkbox-input>
-          <form-checkbox-input label="Stuff" id="GROPI_stuff" name="GROPI_stuff"></form-checkbox-input>
-        </div> -->
+        <div class="py-4">
+          <form-checkbox-input 
+            label="Nu sunt probleme" 
+            :id="'no_probleme'+ id" 
+            :name="'no_problems_'+ id"
+            v-model="no_problems"
+          >
+          </form-checkbox-input>
+          <input type="checkbox" v-model="no_problems" />
+        </div>
+ 
+
+        <div v-if="!no_problems" class="border border-gray-200 p-4 my-4 rounded-md">
+          <div v-for="(subSection, subSectionIndex) in sub_sections">
+            <div class="py-2">
+              <form-checkbox-input :label="subSection.title" :id="id+'_'+subSection.id"  :name="id+'_'+subSection.id" ></form-checkbox-input>
+            </div>
+          </div>
+          
+        </div>
     </div>
   </script>
 
@@ -77,17 +84,13 @@
     <div class="p-4">
       <form action="test" method="POST">
 
-        <div class="border border-gray-200">
-          <form-text-input label="Email" type="text" id="ADDRESS_INPUT" name="ADDRESS"></form-text-input>
+        <div class="mb-4">
+          <form-text-input label="Adresa/Strada" type="text" id="ADDRESS_INPUT" name="ADDRESS" v-model="address"></form-text-input>
         </div>
 
-        <div v-for="(section, sectionIndex) in sections">
-          <p>a {{section.title}}</p>
-          <form-section :id="section.id" :title="section.title"></form-section>
+        <div v-for="(section, sectionIndex) in sections" class="mb-4">
+          <form-section :id="section.id" :title="section.title" v-model="section.checked" :sub_sections="section.sub_sections" :no_problems="section.no_problems"></form-section>
         </div>
-
-
-
 
         <button>Send</button>
 
@@ -110,10 +113,9 @@
 
   Vue.component('form-checkbox-input', {
     template: '#FormCheckboxInput',
-    props: ['inputValue', 'name', 'id', 'label', 'error'],
+    props: ['value', 'name', 'id', 'label', 'error'],
     methods: {
       updateInputValue: function(value) {
-        console.log({value})
         this.$emit('input', value)
       }
     }
@@ -121,28 +123,71 @@
 
   Vue.component('form-section', {
     template: '#FormSection',
-    props: ['title', 'id'],
-    data: () => ({
-      problems: true
-    })
+    props: ['title', 'id', 'no_problems', 'sub_sections'],
   });
 
 
   var app = new Vue({
     el: '#app',
     data: {
+      address: '',
       sections: [
         {
           id: "FIRST",
           title: "Carosabil, trotuare, iluminat",
+          no_problems: false,
+          sub_sections: [
+            {
+              id: 'ONE',
+              title: 'Gropi',
+              type: 'number',
+              checked: false
+            },
+            {
+              id: 'TOW',
+              title: 'Indicatoare avariate / lipsă',
+              type: 'number',
+              checked: false
+            }
+          ]
         },
         {
           id: "SECOND",
           title: "Parcare",
+          no_problems: false,
+          sub_sections: [
+            {
+              id: 'ONE',
+              title: 'Mașini abandonate',
+              type: 'text',
+              checked: false
+            },
+            {
+              id: 'TOW',
+              title: 'Parcare neregulamentară',
+              type: 'text',
+              checked: false
+            }
+          ]
         },
         {
           id: "THIRD",
           title: "Cladiri, curatenie, spatii de joaca",
+          no_problems: false,
+          sub_sections: [
+            {
+              id: 'ONE',
+              title: 'Graffiti',
+              type: null,
+              checked: false
+            },
+            {
+              id: 'TOW',
+              title: 'Gunoi abandonat',
+              type: null,
+              checked: false
+            }
+          ]
         }
       ]
     },
