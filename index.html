@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://tailwindui.com/css/components-v2.css?id=3e4f5c1d054769555716" rel="stylesheet">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script type="text/html" id="FormCheckboxInput">
+    <div class="relative flex items-start">
+      <div class="flex items-center h-5">
+        <input 
+          :name="name"
+          :id="id" 
+          type="checkbox" 
+          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+          :checked="inputValue"
+          :value="inputValue"
+          @input="updateInputValue($event.target.checked)"
+        >
+      </div>
+      <div v-if="label" class="ml-3 text-sm">
+        <label :for="id" class="font-medium text-gray-700">{{label}}</label>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/html" id="FormTextInput">
+    <div>
+      <label 
+        v-if="label" 
+        for="email" 
+        class="block text-sm font-medium text-gray-700"
+      >
+        {{label}}
+      </label>
+      <div class="mt-1">
+        <input 
+          :type="type"
+          :name="name"
+          :id="id"
+          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" 
+        >
+      </div>
+      <p v-if="error" class="mt-2 text-sm text-gray-500" id="email-description">{{error}}</p>
+    </div>
+  </script>
+
+  <script type="text/html" id="FormSection">
+  <div>
+        <h2>{{title}}</h2>
+        <form-checkbox-input 
+          :label="'Nu sunt probleme ' + title" 
+          :id="'probleme_'+ id" 
+          :name="'probleme_'+ id"
+          :inputValue="problems"
+          v-model="problems"
+        >
+        </form-checkbox-input>
+        <input class="filter__input" type="checkbox" v-model="problems"></input>
+        <p>bbb: {{problems ? 'da': 'ba'}}</p>
+        <p>aaa: {{problems ? 'da': 'ba'}}</p>
+
+        <!-- <div class="border border-gray-200 p-4">
+          <form-checkbox-input label="Gropi" id="GROPI" name="GROPI"></form-checkbox-input>
+          <form-checkbox-input label="Stuff" id="GROPI_stuff" name="GROPI_stuff"></form-checkbox-input>
+        </div> -->
+    </div>
+  </script>
+
+  <div id="app">
+    <div class="p-4">
+      <form action="test" method="POST">
+
+        <div class="border border-gray-200">
+          <form-text-input label="Email" type="text" id="ADDRESS_INPUT" name="ADDRESS"></form-text-input>
+        </div>
+
+        <div v-for="(section, sectionIndex) in sections">
+          <p>a {{section.title}}</p>
+          <form-section :id="section.id" :title="section.title"></form-section>
+        </div>
+
+
+
+
+        <button>Send</button>
+
+      </form>
+    </div>
+  </div>
+</body>
+
+
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+
+
+
+<script>
+
+  Vue.component('form-text-input', {
+    template: '#FormTextInput',
+    props: ['value', 'type', 'name', 'id', 'label', 'error', 'placeholder'],
+  });
+
+  Vue.component('form-checkbox-input', {
+    template: '#FormCheckboxInput',
+    props: ['inputValue', 'name', 'id', 'label', 'error'],
+    methods: {
+      updateInputValue: function(value) {
+        console.log({value})
+        this.$emit('input', value)
+      }
+    }
+  });
+
+  Vue.component('form-section', {
+    template: '#FormSection',
+    props: ['title', 'id'],
+    data: () => ({
+      problems: true
+    })
+  });
+
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+      sections: [
+        {
+          id: "FIRST",
+          title: "Carosabil, trotuare, iluminat",
+        },
+        {
+          id: "SECOND",
+          title: "Parcare",
+        },
+        {
+          id: "THIRD",
+          title: "Cladiri, curatenie, spatii de joaca",
+        }
+      ]
+    },
+  })
+</script>
+
+</html>
