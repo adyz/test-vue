@@ -26,7 +26,7 @@
             <div class="flex text-sm text-gray-600">
               <label :for="id" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                 <span>Upload</span>
-                <input :id="id" :name="name" type="file" class="sr-only">
+                <input :id="id" :name="name" type="file" class="sr-only" />
               </label>
               <p class="pl-1">or don't upload</p>
             </div>
@@ -50,7 +50,7 @@
           :checked="value"
           :value="value"
           @input="updateInputValue($event.target.checked)"
-        >
+        />
       </div>
       <div v-if="label" class="ml-3 text-sm">
         <label :for="id" class="font-medium text-gray-700">{{label}}</label>
@@ -61,16 +61,22 @@
   <script type="text/html" id="FormTextInput">
 
     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-      <label  v-if="label" :for="id" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+      <label 
+        v-if="label" 
+        :for="id" 
+        class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+      >
         {{label}}
       </label>
       <div class="mt-1 sm:mt-0 sm:col-span-2">
-        <input :type="type"
-        :name="name"
-        :id="id"
-        :value="value"
-        @input="$emit('input', $event.target.value)"
-        class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
+        <input 
+          :type="type"
+          :name="name"
+          :id="id"
+          :value="value"
+          @input="$emit('input', $event.target.value)"
+          class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+        />
       </div>
       <p v-if="error" class="mt-2 text-sm text-gray-500" id="email-description">{{error}}</p>
     </div>
@@ -78,7 +84,8 @@
   </script>
 
   <script type="text/html" id="FormSection">
-  <div class="border border-gray-100 p-4 rounded-md">
+    <div class="border border-gray-100 p-4 rounded-md">
+        
         <h2 class="text-lg">{{section.title}}</h2>
 
         <div class="py-4">
@@ -95,44 +102,47 @@
         <div v-if="!section.no_problems" class="border border-gray-200 my-4 rounded-md">
           <div v-for="(subSection, subSectionIndex) in section.sub_sections">
             <div class="p-4 border-b">   
-              <form-checkbox-input v-model="subSection.checked" :label="subSection.title" :id="section.id+'_'+subSection.id"  :name="section.id+'_'+subSection.id" ></form-checkbox-input>
+              <form-checkbox-input 
+                v-model="subSection.checked" 
+                :label="subSection.title" 
+                :id="section.id+'_'+subSection.id"
+                :name="section.id+'_'+subSection.id"
+              >
+              </form-checkbox-input>
 
               <div v-if="subSection.checked">
               
                 <div class="py-8">
-                  <form-text-input :label="'Detalii '+subSection.title" :type="subSection.type" :id="section.id+'_'+subSection.id+'_details'"  :name="section.id+'_'+subSection.id+'_details'" v-model="subSection.details"></form-text-input>
+                  <form-text-input
+                    :label="'Detalii '+subSection.title" 
+                    :type="subSection.type" 
+                    :id="section.id+'_'+subSection.id+'_details'"  
+                    :name="section.id+'_'+subSection.id+'_details'" 
+                    v-model="subSection.details">
+                  </form-text-input>
                   <br />
-                  <form-upload-input :label="'Poze '+subSection.title" :id="section.id+'_'+subSection.id+'_image'" :name="section.id+'_'+subSection.id+'_image'"></form-upload-input>
+                  <form-upload-input
+                    :label="'Poze '+subSection.title" 
+                    :id="section.id+'_'+subSection.id+'_image'" 
+                    :name="section.id+'_'+subSection.id+'_image'">
+                  </form-upload-input>
                 </div>
 
-                <div v-if="subSection.plates">
-                    <div v-for="(plate, plateIndex) in subSection.plates">
-                      <form-text-input 
-                      label="Numar inmatricuclare" 
-                      type="text" 
-                      :id="section.id+'_'+subSection.id+'_plate'+plateIndex"  
-                      :name="section.id+'_'+subSection.id+'_plate'+plateIndex" 
-                      v-model="plate.number"></form-text-input>
-                      <br />
-                    </div>
-               
-                    <hr />
-                    <br />
-            
-                    <button type="button" @click="addPlate(subSectionIndex)" class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-blue-400 hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                      <!-- Heroicon name: solid/mail -->
-                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                      </svg>
-                      Adauga
-                    </button>
+                <div v-for="(plate, plateIndex) in subSection.plates">
+                  <form-text-input 
+                    label="Numar inmatricuclare" 
+                    type="text" 
+                    :id="section.id+'_'+subSection.id+'_plate'+plateIndex"  
+                    :name="section.id+'_'+subSection.id+'_plate'+plateIndex" 
+                    v-model="plate.number">
+                  </form-text-input>
+                  <br />
                 </div>
                 
               </div>
               
             </div>
           </div>
-          
         </div>
     </div>
   </script>
@@ -141,7 +151,8 @@
     <div class="p-4 max-w-5xl mx-auto">
       <form action="test" method="POST" @submit="checkForm">
         <div class="mb-4">
-          <form-text-input label="Adresa/Strada" type="text" id="ADDRESS_INPUT" name="ADDRESS" v-model="address"></form-text-input>
+          <form-text-input label="Adresa/Strada" type="text" id="ADDRESS_INPUT" name="ADDRESS" v-model="address">
+          </form-text-input>
         </div>
 
         <div v-for="(section, sectionIndex) in sections" class="mb-4">
@@ -171,7 +182,7 @@
     template: '#FormCheckboxInput',
     props: ['value', 'name', 'id', 'label', 'error'],
     methods: {
-      updateInputValue: function(value) {
+      updateInputValue: function (value) {
         this.$emit('input', value)
       }
     }
@@ -186,7 +197,7 @@
     template: '#FormSection',
     props: ['section'],
     methods: {
-      addPlate: function(value) {
+      addPlate: function (value) {
         console.log('dadas', this, this.section.sub_sections[value])
         this.section.sub_sections[value].plates.push({
           number: ''
@@ -254,14 +265,14 @@
             {
               id: 'GRAFFITI',
               title: 'Graffiti',
-              type: null,
+              type: 'text',
               checked: false,
               details: null
             },
             {
               id: 'GUNOI',
               title: 'Gunoi abandonat',
-              type: null,
+              type: 'text',
               checked: false,
               details: null
             }
@@ -270,9 +281,9 @@
       ]
     },
     methods: {
-      checkForm: function(e){
-          // e.preventDefault();
-          console.log('E', e, {sections: this.sections})
+      checkForm: function (e) {
+        // e.preventDefault();
+        console.log('E', e, { sections: this.sections })
       }
     }
   })
