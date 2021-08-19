@@ -104,6 +104,19 @@
                   <br />
                   <form-upload-input :label="'Poze '+subSection.title" :id="section.id+'_'+subSection.id+'_image'" :name="section.id+'_'+subSection.id+'_image'"></form-upload-input>
                 </div>
+
+                <div v-if="subSection.plates">
+                    <div v-for="(plate, plateIndex) in subSection.plates">
+                      <form-text-input 
+                      label="Plate" 
+                      type="text" 
+                      :id="section.id+'_'+subSection.id+'_plate'+plateIndex"  
+                      :name="section.id+'_'+subSection.id+'_plate'+plateIndex" 
+                      v-model="plate.number"></form-text-input>
+                      <br />
+                    </div>
+                </div>
+                <button type="button" @click="addPlate(subSectionIndex)">Add plate</button>
               </div>
               
             </div>
@@ -115,7 +128,7 @@
 
   <div id="app">
     <div class="p-4 max-w-5xl mx-auto">
-      <form action="test" method="POST">
+      <form action="test" method="POST" @submit="checkForm">
         <div class="mb-4">
           <form-text-input label="Adresa/Strada" type="text" id="ADDRESS_INPUT" name="ADDRESS" v-model="address"></form-text-input>
         </div>
@@ -161,6 +174,14 @@
   Vue.component('form-section', {
     template: '#FormSection',
     props: ['section'],
+    methods: {
+      addPlate: function(value) {
+        console.log('dadas', this, this.section.sub_sections[value])
+        this.section.sub_sections[value].plates.push({
+          number: ''
+        })
+      }
+    }
   });
 
 
@@ -200,7 +221,10 @@
               title: 'Mașini abandonate',
               type: 'text',
               checked: false,
-              details: null
+              details: null,
+              plates: [{
+                number: 'B00XXX'
+              }]
             },
             {
               id: 'PARCARE_NEREGULAMENTARA',
@@ -234,6 +258,12 @@
         }
       ]
     },
+    methods: {
+      checkForm: function(e){
+          // e.preventDefault();
+          console.log('E', e, {sections: this.sections})
+      }
+    }
   })
 </script>
 
